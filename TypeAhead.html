@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="TypeAhead.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    getCities()
+    async function getCities(){
+        cities = await fetch(endpoint)
+        citiez = await cities.json()
+        console.log(citiez)
+        searchBox = document.querySelector(".search")
+        var i
+        var flag = 0
+        document.addEventListener("input",function(citiez,searchBox){
+            if (flag == 0) {
+            for (let j = 0; j < 2; j++) {
+            var b = document.querySelector("li")
+            b.remove()   
+            }
+            flag = 1
+            } else {
+                for (let j = 0; j < i; j++) {
+                var b =document.querySelector("li")
+                b.remove()
+            }
+            }
+            searchBox = document.querySelector(".search")
+            fetch(endpoint).then(resp=>{return resp.json()}).then(data=>{
+                i=0
+                data.filter(element => {
+                if(element.city.includes(searchBox.value)||element.state.includes(searchBox.value)){
+                    ul=document.querySelector(".suggestions")
+                    li=document.createElement('li')
+                    text=document.createTextNode(element.city+", "+element.state)
+                    span=document.createElement('span')
+                    pop=document.createTextNode(element.population)
+                    span.appendChild(pop)
+                    span.setAttribute("class","population")
+                    ul.appendChild(li)
+                    li.appendChild(text)
+                    li.appendChild(span)    
+                    i++
+                }
+        })
+    })
+    })
+    }
+
+</script>
+</body>
+</html>
